@@ -5,8 +5,10 @@ const ACCESS_KEY = "loanpro.accessToken"
 const REFRESH_KEY = "loanpro.refreshToken"
 const USER_KEY = "loanpro.user"
 
+const API_BASE = (import.meta.env.VITE_API_URL as string | undefined)?.replace(/\/$/, "") || "/api/v1"
+
 export const api = axios.create({
-  baseURL: "/api/v1",
+  baseURL: API_BASE,
 })
 
 function isAnonymousAuthUrl(url?: string) {
@@ -85,7 +87,7 @@ export async function revokeRemoteSession() {
   } catch {
     const refreshToken = localStorage.getItem(REFRESH_KEY)
     if (refreshToken) {
-      await axios.post("/api/v1/auth/logout", { refreshToken }).catch(() => undefined)
+      await axios.post(`${API_BASE}/auth/logout`, { refreshToken }).catch(() => undefined)
     }
   }
 }
@@ -94,7 +96,7 @@ async function refreshAccessToken() {
   const refreshToken = localStorage.getItem(REFRESH_KEY)
   if (!refreshToken) return null
   const { data } = await axios.post<ApiResponse<{ accessToken: string; refreshToken: string; user: AuthUser }>>(
-    "/api/v1/auth/refresh",
+    `${API_BASE}/auth/refresh`,
     { refreshToken },
   )
   persistSession(data.data.accessToken, data.data.refreshToken, data.data.user)
