@@ -1,0 +1,56 @@
+spring:
+  application:
+    name: loan-processing-test
+  datasource:
+    url: jdbc:h2:mem:loanpro;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;DATABASE_TO_LOWER=TRUE
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: create-drop
+  flyway:
+    enabled: false
+  mail:
+    host: localhost
+    port: 3025
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 15MB
+
+app:
+  jwt:
+    secret: bG9hbnByby1kZXZlbG9wbWVudC1qd3Qtc2VjcmV0LTMyYg==
+    access-token-minutes: 15
+    refresh-token-days: 7
+    issuer: loanpro
+    audience: loanpro-api
+  security:
+    lockout-attempts: 5
+    lockout-minutes: 15
+  cors:
+    allowed-origins: http://localhost:5173
+  storage:
+    type: local
+    local-dir: ${java.io.tmpdir}/loanpro-test-uploads
+    s3:
+      endpoint: http://localhost:9000
+      bucket: loanpro-docs
+      region: us-east-1
+      access-key: minioadmin
+      secret-key: minioadmin
+      path-style: true
+    cloudinary:
+      cloud-name:
+      api-key:
+      api-secret:
+      folder: loanpro
+  mail:
+    from: noreply@loanpro.local
+  seed:
+    enabled: true
+  ai:
+    service-url: http://127.0.0.1:8000
+    timeout-seconds: 2
