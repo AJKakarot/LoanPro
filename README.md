@@ -30,3 +30,35 @@ Or: `docker compose --profile app up --build` → UI at http://localhost:8081
 | Admin | admin@loanpro.com | Admin@12345 |
 
 Flow: Customer submits → Maker verifies → Checker decides.
+
+## Deploy
+
+**Backend → [Render](https://render.com)** (Web Service, Docker, root `backend`)
+
+Health: `/actuator/health`
+
+Env:
+```
+DATABASE_URL=jdbc:postgresql://...neon.tech/neondb?sslmode=require
+DATABASE_USERNAME=
+DATABASE_PASSWORD=
+JWT_SECRET=                           # 32+ random chars
+CORS_ORIGINS=https://YOUR-APP.vercel.app
+STORAGE_TYPE=cloudinary
+CLOUDINARY_CLOUD_NAME=
+CLOUDINARY_API_KEY=
+CLOUDINARY_API_SECRET=
+CLOUDINARY_FOLDER=loanpro
+```
+
+**Frontend → [Vercel](https://vercel.com)** (Import GitHub, root `frontend`)
+
+Env:
+```
+VITE_API_URL=https://YOUR-API.onrender.com/api/v1
+```
+
+Redeploy frontend after setting `VITE_API_URL`. Then set `CORS_ORIGINS` on Render to the Vercel URL and restart the API.
+
+Demo logins stay the same if `APP_SEED_ENABLED` is true (default).
+
