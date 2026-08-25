@@ -28,3 +28,15 @@ services:
         value: loanpro
       - key: AI_SERVICE_URL
         sync: false
+
+  - type: web
+    name: loanpro-ai
+    runtime: docker
+    rootDir: ai-service
+    dockerfilePath: Dockerfile
+    healthCheckPath: /health
+    envVars:
+      - key: GROQ_API_KEY
+        sync: false
+      - key: GROQ_MODEL
+        value: openai/gpt-oss-120b
